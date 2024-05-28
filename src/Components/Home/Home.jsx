@@ -19,11 +19,18 @@ import {
   TableContainer,
   Flex
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import customerQuery from "../../Hooks/customerQuery";
+import { GoSun } from "react-icons/go";
+import { FaRegMoon } from "react-icons/fa";
 
 const Home = () => {
+
+
   const navigation = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
 
+  // token section ------------------------
   const token = localStorage?.token;
   const user = localStorage?.user;
   if (token && user) {
@@ -39,14 +46,29 @@ const Home = () => {
     navigation("/login");
   }
 
+  // query section --------------------------
+  // query section --------------------------
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['customer'],
+    queryFn: customerQuery
+  });
+  console.log(data);
+
+  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (error) return <p className="text-center">Error loading data</p>;
+
+
   return (
     <div className="mx-10">
-      <h1 className="text-3xl text-center  uppercase ">
+      
         {/* dark and light button  */}
-        <Button onClick={toggleColorMode} mt={4}>
-          Toggle {colorMode === "light" ? "Dark" : "Light"}
+        <div className="flex justify-between items-center mt-4 mb-10">
+        <h1 className="text-lgl text-center  uppercase  bg-green-200 p-2">Inverntory Task </h1>
+        <Button colorScheme="yellow" onClick={toggleColorMode} >
+          {colorMode === "light" ? <FaRegMoon className=" text-white"/> : <GoSun />}
         </Button>
-        </h1>
+        </div>
+        
         {/* Tab section  */}
         <Tabs variant="unstyled">
         <Flex mb={10} justifyContent="space-between">
@@ -71,7 +93,6 @@ const Home = () => {
                   <Thead>
                     <Tr>
                       <Th>Index</Th>
-                      <Th>Id</Th>
                       <Th>Customer Name</Th>
                       <Th isNumeric>Price</Th>
                       <Th isNumeric>Last Modified </Th>
@@ -79,11 +100,19 @@ const Home = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <Tr>
-                      <Td></Td>
-                      <Td></Td>
-                      <Td></Td>
+                  {data.data && data.data.map((customer, index) => (
+                    <Tr key={customer.id}>
+                      <Td>{index + 1}</Td>
+                      <Td>{customer.id}</Td>
+                      <Td>{customer?.name}</Td>
+                      <Td isNumeric>{customer.price}</Td>
+                      <Td isNumeric>{customer.lastModified}</Td>
+                      <Td isNumeric>
+                        <Button colorScheme="blue" size="sm">Edit</Button>
+                        <Button colorScheme="green" size="sm" ml={2}>View</Button>
+                      </Td>
                     </Tr>
+                  ))}
                   </Tbody>
                 </Table>
               </TableContainer>
