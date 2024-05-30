@@ -10,6 +10,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import CreateSaleOrder from "./Components/CreateSaleOrder/CreateSaleOrder.jsx";
 
 
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/createSales",
+    element: <CreateSaleOrder />,
   },
 ]);
 

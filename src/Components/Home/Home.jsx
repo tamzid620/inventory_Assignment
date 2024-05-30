@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
   useColorMode,
@@ -80,7 +80,10 @@ const Home = () => {
               Completed Sale Orders
             </Tab>
           </TabList>
+          {/* sale order button ------------------- */}
+          <Link to="/createSales">
           <Button colorScheme='green'>+ Sale Order</Button>
+          </Link>
           </Flex>
           <TabPanels>
             {/* TabPanel 1  */}
